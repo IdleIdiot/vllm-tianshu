@@ -216,9 +216,9 @@ def torch_sdpa_wrapper(
     cu_seqlens: torch.Tensor | None = None,
     enable_gqa: bool = False,
 ) -> torch.Tensor:
-    # Never remove the contiguous logic for ROCm
+    # Never remove the contiguous logic for ROCm/OOT
     # Without it, hallucinations occur with the backend
-    if current_platform.is_rocm():
+    if current_platform.is_rocm() or current_platform.is_out_of_tree():
         q = q.contiguous()
         k = k.contiguous()
         v = v.contiguous()
